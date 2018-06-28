@@ -36,6 +36,18 @@ app.post('/sign_up', function(req, res) {
   });
 });
 
+/* android 단으로의 요청 받는 라우터 골격 */
+app.post('/channels_info', function() {
+
+});
+
+app.post('/videos_info', function() {
+
+});
+
+app.post('/comments_info', function() {
+
+});
 
 app.listen(PORT, function() {
   console.log("Middle Server is Running...")
