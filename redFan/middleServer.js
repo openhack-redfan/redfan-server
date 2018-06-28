@@ -1,15 +1,20 @@
+/* port number */
 const PORT = 24680;
 
+/* express module */
 var express = require('express');
 var app = express();
 
+/* request module */
 /* 안드로이드로부터 mysql 데이터 참조시  */
 var request = require('request');
 
+/* body-parser */
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
+/* database module */
 var mysql = require('mysql');
 var dbConnection = mysql.createConnection({
   host: "13.209.8.64",
