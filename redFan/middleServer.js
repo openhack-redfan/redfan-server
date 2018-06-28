@@ -3,6 +3,9 @@ const PORT = 24680;
 var express = require('express');
 var app = express();
 
+/* 안드로이드로부터 mysql 데이터 참조시  */
+var request = require('request');
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
@@ -13,7 +16,7 @@ var dbConnection = mysql.createConnection({
   user: "teamRedFan",
   password: "1234",
   database: "redFan"
-})
+});
 
 app.post('/sign_up', function(req, res) {
   console.log("received json sign_in data from android application");
