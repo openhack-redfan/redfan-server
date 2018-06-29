@@ -29,7 +29,7 @@ const sentiPerVideo = async (commentList) => {
                 console.log(`Document sentiment:`)
                 console.log(`  Score: ${sentiment.score}`)
                 console.log(`  Magnitude: ${sentiment.magnitude}`)
-                sentiResults.push(sentiment.score)
+                sentiResults.push({ score: sentiment.score, text: document.content, react: 'null' })
             })
             .catch(err => {
                 console.error('ERROR:', err);
@@ -40,15 +40,18 @@ const sentiPerVideo = async (commentList) => {
 
     await Promise.all(sentiPromise)
     let neg = 0, com = 0, pos = 0
-    for(score of sentiResults){
-        if(score < -0.25){
+    for(comment of sentiResults){
+        if(comment.score < -0.25){
             neg += 1
+            comment.react = "negative"
         }
-        else if(score < 0.25){
+        else if(comment.score < 0.25){
             com += 1
+            comment.react = "common"
         }
         else{
             pos += 1
+            comment.react = "positive"
         }
     }
 
@@ -56,10 +59,9 @@ const sentiPerVideo = async (commentList) => {
         neg,
         com,
         pos,
-        total: neg + com + pos
+        total: neg + com + pos,
+        commentResults: sentiResults
     }
 }
 
 module.exports = sentiPerVideo
-
-
