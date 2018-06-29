@@ -55,12 +55,12 @@ app.post('/sign_in', function(req, res) {
 
 app.post('/channels_info', function(req, res) {
     var retObj = new Object();
-    sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + "test2@test.com" + "')"
-    // sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + req.body.userId + "')"
+    // sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + "test2@test.com" + "')"
+    sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + req.body.userId + "')"
 
     dbConnection.query(sql, function(err, row) {
-      retObj.channel = row[0];
-
+      retObj.channel = row;
+    
       sql = "SELECT * FROM videos WHERE videoChannelId IN (SELECT channelId FROM channels WHERE channelUrl = '" + retObj.channel.channelUrl + "')";
       dbConnection.query(sql, function(err, row) {
         retObj.videos = row;

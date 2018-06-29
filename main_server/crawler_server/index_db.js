@@ -44,8 +44,11 @@ if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
           result.channelSubscriberCount + "," +
           result.channelVideoCount + ",'" +
           result.channelPublishedAt + "','" +
-          result.channelCrawledAt +
+          result.channelCrawledAt + "','" +
+          result.channelDetail + "','" +
+          result.channelName +
     "')";
+    console.log(sql);
 
     dbConnection.query(sql, function(err, row) {
       if(err) throw err;
