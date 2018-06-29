@@ -21,22 +21,28 @@ var mysql = require('mysql'), sql,
 
 app.post('/sign_up', function(req, res) {
   console.log("received json sign_in data from android application");
-
-  sql = "INSERT INTO users VALUES('" +
-            req.body.userId + "','" +
-            req.body.userPw + "','" +
-            req.body.userName + "','" +
-            req.body.channelUrl +
-            "')";
-
+  sql = "SELECT * FROM users WHERE userId = '"  + req.body.userId + "'";
+  console.log(sql);
   dbConnection.query(sql, function(err, row) {
-    if(err) {
-      console.log("error occur");
-      res.json({result:false});
-    }// throw err;
-    /* duplicate 정보가 들어왔을 때 (회원 아이디 중복시 예외처리 필요) */
-    res.send("inserted user information into databases successfully\n");
+    if(row.length == 0) {
+      sql = "INSERT INTO users VALUES('" +
+                req.body.userId + "','" +
+                req.body.userPw + "','" +
+                req.body.userName + "','" +
+                req.body.channelUrl +
+                "')";
+
+      dbConnection.query(sql, function(err, row) {
+        if(err) console.log("error occur");
+        console.log("true");
+        res.json({"result":"true"});
+      });
+    } else {
+      console.log("false")
+      res.json({"result":"false"});
+    }
   });
+
 });
 
 app.post('/sign_in', function(req, res) {
@@ -48,6 +54,7 @@ app.post('/channels_info', function(req, res) {
     /* 채널은 하나의 tuple만 로드 */
     sql = "SELECT * FROM channels";
     dbConnection.query(sql, function(err, row) {
+      if(err) console.log("error occur");
       res.json(row[0]);
     });
 });
@@ -56,6 +63,7 @@ app.post('/videos_info', function(req, res) {
     /* 비디오는 하나의 채널에 달린 여러개의 비디오 로드 */
     sql = "SELECT * FROM videos";
     dbConnection.query(sql, function(err, row) {
+      if(err) console.log("error occur");
       res.json(row);
     });
 });
@@ -64,6 +72,7 @@ app.post('/comments_info', function(req, res) {
     /* 코멘트는 하나의 비디오에 달린 여러개의 비디오 로드 */
     sql = "SELECT * FROM comments";
     dbConnection.query(sql, function(err, row) {
+      if(err) console.log("error occur");
       res.json(row);
     });
 });
