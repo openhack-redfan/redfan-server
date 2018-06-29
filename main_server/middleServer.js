@@ -59,8 +59,8 @@ app.post('/channels_info', function(req, res) {
     sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + req.body.userId + "')"
 
     dbConnection.query(sql, function(err, row) {
-      retObj.channel = row;
-    
+      retObj.channel = row[0];
+
       sql = "SELECT * FROM videos WHERE videoChannelId IN (SELECT channelId FROM channels WHERE channelUrl = '" + retObj.channel.channelUrl + "')";
       dbConnection.query(sql, function(err, row) {
         retObj.videos = row;
