@@ -53,22 +53,20 @@ app.post('/sign_in', function(req, res) {
   });
 });
 
-/* 결론 : userId만 전달되면 모든 정보를 참조할 수 있도록 sql query 작성해야 함 */
 app.post('/channels_info', function(req, res) {
-    /* 채널은 하나의 tuple만 로드 */
-    sql = "SELECT * FROM channels";
-    dbConnection.query(sql, function(err, row) {
-      if(err) console.log("error occur");
-      res.json(row[0]);
-    });
-});
+    var retObj = new Object();
+    sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + "test2@test.com" + "')"
+    // sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + req.body.userId + "')"
 
-app.post('/videos_info', function(req, res) {
-    /* 비디오는 하나의 채널에 달린 여러개의 비디오 로드 */
-    sql = "SELECT * FROM videos";
     dbConnection.query(sql, function(err, row) {
-      if(err) console.log("error occur");
-      res.json(row);
+      retObj.channel = row[0];
+
+      sql = "SELECT * FROM videos WHERE videoChannelId IN (SELECT channelId FROM channels WHERE channelUrl = '" + retObj.channel.channelUrl + "')";
+      dbConnection.query(sql, function(err, row) {
+        retObj.videos = row;
+        /* 채널 정보와 비디오 정보를 함께 res */
+        res.json(retObj);
+      });
     });
 });
 
