@@ -46,7 +46,11 @@ app.post('/sign_up', function(req, res) {
 });
 
 app.post('/sign_in', function(req, res) {
-  sql = 'SELECT '
+  sql = "SELECT * FROM users WHERE userId = '" + req.body.userId + "' AND userPw = '" + req.body.userPw + "'";
+  dbConnection.query(sql, function(err, row) {
+    if(row.length > 0) res.json({"result":"true"});
+    else res.json({"result":"false"});
+  });
 });
 
 /* 결론 : userId만 전달되면 모든 정보를 참조할 수 있도록 sql query 작성해야 함 */
