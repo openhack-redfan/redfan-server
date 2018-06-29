@@ -30,10 +30,17 @@ app.post('/sign_up', function(req, res) {
             "')";
 
   dbConnection.query(sql, function(err, row) {
-    if(err) throw err;
+    if(err) {
+      console.log("error occur");
+      res.json({result:false});
+    }// throw err;
     /* duplicate 정보가 들어왔을 때 (회원 아이디 중복시 예외처리 필요) */
     res.send("inserted user information into databases successfully\n");
   });
+});
+
+app.post('/sign_in', function(req, res) {
+  sql = 'SELECT '
 });
 
 /* 결론 : userId만 전달되면 모든 정보를 참조할 수 있도록 sql query 작성해야 함 */
