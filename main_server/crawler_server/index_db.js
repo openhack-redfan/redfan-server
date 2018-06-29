@@ -35,7 +35,7 @@ var sql;
 if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 
   channelDetail.setWriter(async (result, channel, time) => {
-
+    var channelDetail = result.channelDetail.replace(/['"]+/g, '');
     sql = "INSERT INTO channels VALUES('" +
           result.channelId + "','" +
           result.channelUrl + "','" +
@@ -45,7 +45,7 @@ if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
           result.channelVideoCount + ",'" +
           result.channelPublishedAt + "','" +
           result.channelCrawledAt + "','" +
-          result.channelDetail + "','" +
+          channelDetail + "','" +
           result.channelName +
     "')";
     console.log(sql);
@@ -85,9 +85,10 @@ if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
   })
 
   commentDetail.setWriter(async (result, dirName, videoId, time) => {
-    var commentText;
+    var commentText, commentAuthorName;
     result.forEach(function(element, index, array) {
       commentText = element.commentText.replace(/['"\n]+/g, '');
+      commentAuthorName = element.commentText.replace(/['"]+/g, '');
 
       sql = "INSERT INTO comments VALUES('" +
             element.commentId + "','" +

@@ -15,8 +15,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
 app.post('/sign_up_init', function(req, res) {
-    /* url 파싱하여 채널 id만 넣기 */
-    main('UCxx7UvIhPkEQxaplaWS2hLg');
+    var channelId = req.body.channelURL.split('channel/')[1];
+    main(channelId);
     res.send("signed up successfully\n");
 });
 
