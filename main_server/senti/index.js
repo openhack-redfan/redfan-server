@@ -1,6 +1,15 @@
 const calLover = require('./lovers.js'),
     senti = require('./senti-google.js')
 
+var mysql = require('mysql'), loverSql, sentSql;
+  dbConnection = mysql.createConnection({
+  host: "13.209.8.64",
+  user: "teamRedFan",
+  password: "1234",
+  database: "redFan"
+});
+
+
 /* Responsible Example of Using 'lovers.js' module */
 let totalCommentAuthor = ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D', 'E', 'F', 'G', 'H', '1', '2', '3', '4', '5', '6', '7', '8']
 let subscriberCount = 1000
@@ -52,8 +61,8 @@ let commentPerVideo = [
     '뭐여 시청자들 심쿵사 시키려는 의도여????',
 ]
 
-const doAsync = async () => {
+const doAsync = async (commentPerVideo) => {
     let data = await senti(commentPerVideo)
     console.log(data) // ex) data = { neg: 4, com: 17, pos: 16 , total: 37 }, json type
 }
-doAsync()
+module.exports = doAsync;

@@ -1,6 +1,8 @@
 /* port number */
 const PORT = 24680;
 
+var doAsync = require('./senti/index.js')
+
 /* express module */
 var express = require('express');
 var app = express();
@@ -72,10 +74,14 @@ app.post('/channels_info', function(req, res) {
 
 app.post('/comments_info', function(req, res) {
     /* 코멘트는 하나의 비디오에 달린 여러개의 비디오 로드 */
-    sql = "SELECT * FROM comments";
+    // req.body.videoId -------
+    sql = "SELECT * FROM comments WHERE videoId IN (SELECT videoId FROM videos WHERE videoId = '" + req.body.videoId + "')";
+    let commentPerVideo = [];
     dbConnection.query(sql, function(err, row) {
-      if(err) console.log("error occur");
-      res.json(row);
+      for(let elem of row)
+        commentPerVideo.push(elem.commentText);
+      // res.send(commentPerVideo);
+      console.log(doAsync(commentPerVideo));
     });
 });
 
