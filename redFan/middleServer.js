@@ -31,32 +31,36 @@ app.post('/sign_up', function(req, res) {
 
   dbConnection.query(sql, function(err, row) {
     if(err) throw err;
-
     /* duplicate 정보가 들어왔을 때 (회원 아이디 중복시 예외처리 필요) */
     res.send("inserted user information into databases successfully\n");
   });
 });
 
-/* android 단으로부터 요청 받는 라우터 골격 */
+/* 결론 : userId만 전달되면 모든 정보를 참조할 수 있도록 sql query 작성해야 함 */
 app.post('/channels_info', function(req, res) {
+    /* 채널은 하나의 tuple만 로드 */
     sql = "SELECT * FROM channels";
-    // 
-    // res.json({
-    //   abc : "asdf"
-    //
-    // });
-
+    dbConnection.query(sql, function(err, row) {
+      res.json(row[0]);
+    });
 });
 
 app.post('/videos_info', function(req, res) {
+    /* 비디오는 하나의 채널에 달린 여러개의 비디오 로드 */
     sql = "SELECT * FROM videos";
-
+    dbConnection.query(sql, function(err, row) {
+      res.json(row);
+    });
 });
 
 app.post('/comments_info', function(req, res) {
+    /* 코멘트는 하나의 비디오에 달린 여러개의 비디오 로드 */
     sql = "SELECT * FROM comments";
+    dbConnection.query(sql, function(err, row) {
+      res.json(row);
+    });
 });
 
 app.listen(PORT, function() {
-  console.log("Middle Server is Running...")
+  console.log("Middle Server is Running...");
 });
