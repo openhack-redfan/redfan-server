@@ -5,18 +5,14 @@ const PORT = 24680;
 var express = require('express');
 var app = express();
 
-/* request module */
-/* 안드로이드로부터 mysql 데이터 참조시  */
-var request = require('request');
-
 /* body-parser */
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
 /* database module */
-var mysql = require('mysql');
-var dbConnection = mysql.createConnection({
+var mysql = require('mysql'), sql,
+  dbConnection = mysql.createConnection({
   host: "13.209.8.64",
   user: "teamRedFan",
   password: "1234",
@@ -26,7 +22,7 @@ var dbConnection = mysql.createConnection({
 app.post('/sign_up', function(req, res) {
   console.log("received json sign_in data from android application");
 
-  var sql = "INSERT INTO users VALUES('" +
+  sql = "INSERT INTO users VALUES('" +
             req.body.userId + "','" +
             req.body.userPw + "','" +
             req.body.userName + "','" +
@@ -41,17 +37,24 @@ app.post('/sign_up', function(req, res) {
   });
 });
 
-/* android 단으로의 요청 받는 라우터 골격 */
-app.post('/channels_info', function() {
+/* android 단으로부터 요청 받는 라우터 골격 */
+app.post('/channels_info', function(req, res) {
+    sql = "SELECT * FROM channels";
+    // 
+    // res.json({
+    //   abc : "asdf"
+    //
+    // });
 
 });
 
-app.post('/videos_info', function() {
+app.post('/videos_info', function(req, res) {
+    sql = "SELECT * FROM videos";
 
 });
 
-app.post('/comments_info', function() {
-
+app.post('/comments_info', function(req, res) {
+    sql = "SELECT * FROM comments";
 });
 
 app.listen(PORT, function() {
