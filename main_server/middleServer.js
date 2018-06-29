@@ -1,7 +1,10 @@
 /* port number */
 const PORT = 24680;
 
-var doAsync = require('./senti/index.js')
+const calLover = require('./senti/lovers.js'),
+    senti = require('./senti/senti-google.js')
+
+
 
 /* express module */
 var express = require('express');
@@ -77,11 +80,32 @@ app.post('/comments_info', function(req, res) {
     // req.body.videoId -------
     sql = "SELECT * FROM comments WHERE videoId IN (SELECT videoId FROM videos WHERE videoId = '" + req.body.videoId + "')";
     let commentPerVideo = [];
+    let retObj = {
+      posComments : [],
+      negComments : []
+    }
+
     dbConnection.query(sql, function(err, row) {
       for(let elem of row)
         commentPerVideo.push(elem.commentText);
-      // res.send(commentPerVideo);
-      console.log(doAsync(commentPerVideo));
+
+      const doAsync = async (commentPerVideo) => {
+          let dataSet = await senti(commentPerVideo);
+
+          // let sentiCommentsObj = dataSet.commentResults;
+
+          // for(let obj of sentiCommentsObj) {
+          //   console.log(sentiCommentsObj)
+          //   if(obj.react.equals("positive") && retObj.posComments.length < 20)
+          //     retObj.posComments.push(obj.react.text);
+          //   else if(obj.react.equals("negative") && retObj.negComments.length < 20)
+          //     retObj.negComments.push(obj.react.text);
+          //   else if(retObj.posComments.length >= 20 && retObj.negComments.length >= 20)
+          //     break;
+          // }
+          res.json(dataSet);
+      }
+      doAsync(commentPerVideo);
     });
 });
 
