@@ -8,7 +8,7 @@ module.exports = class ChannelDetail extends Collector {
     return {
       channelId: item.id,
       channelName: item.snippet.title,
-      channelDetail: item.snippet.descryiption,
+      channelDetail: item.snippet.description,
       channelUrl: `https://www.youtube.com/channel/${item.id}`,
       channelThumbs: item.snippet.thumbnails.high.url,
       channelViewCount: item.statistics.viewCount,
