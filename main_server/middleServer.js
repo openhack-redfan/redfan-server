@@ -4,8 +4,6 @@ const PORT = 24680;
 const calLover = require('./senti/lovers.js'),
     senti = require('./senti/senti-google.js')
 
-
-
 /* express module */
 var express = require('express');
 var app = express();
@@ -60,6 +58,7 @@ app.post('/sign_in', function(req, res) {
 
 app.post('/channels_info', function(req, res) {
     var retObj = new Object();
+    var test = [];
     // sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + "test2@test.com" + "')"
     sql = "SELECT * FROM channels WHERE channelUrl IN (SELECT channelURL FROM users WHERE userId = '" + req.body.userId + "')"
 
@@ -69,8 +68,24 @@ app.post('/channels_info', function(req, res) {
       sql = "SELECT * FROM videos WHERE videoChannelId IN (SELECT channelId FROM channels WHERE channelUrl = '" + retObj.channel.channelUrl + "')";
       dbConnection.query(sql, function(err, row) {
         retObj.videos = row;
+        for(video of retObj.videos) {
+          sql = "SELECT commentAuthorName FROM comments WHERE videoId IN (SELECT videoId FROM videos WHERE videoId ='" + video.videoId + "')";
+          console.log(sql)
+          dbConnection.query(sql, function(err, row) {
+            if(err) console.log("Asdf")
+            for(elem of row)
+              test.push(elem.commentAuthorName);
+              // console.log(elem.commentAuthorName);
+            // console.log(row[0]);
+            // console.log(test);
+            retObj.author = test;
+
+            res.json(retObj);
+          });
+
+        }
         /* 채널 정보와 비디오 정보를 함께 res */
-        res.json(retObj);
+        // res.json(retObj);
       });
     });
 });

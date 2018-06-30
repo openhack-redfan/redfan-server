@@ -28,7 +28,6 @@ var mysql = require('mysql'),
 });
 
 /* load channelID from input */
-let channel = 'UCxx7UvIhPkEQxaplaWS2hLg'
 var sql;
 
 // development env wirter setting
